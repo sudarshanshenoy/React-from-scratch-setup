@@ -426,3 +426,33 @@ class App extends React.Component {
 
 export default App;
 ```
+
+### 11. Import css in Javasript
+Create a index.css with following content
+``` 
+button {
+  background-color: rgb(80, 109, 240);
+  color: #fff
+}
+```
+In index.js import css file
+```
+import './index.css'
+```
+We will need loaders else the webpack load be able to load
+```
+npm i -D css-loader style-loader
+```
+In the wepack.config.base.js add the following similar to the babel loaders under module
+```
+{
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+        exclude: /node_modules/
+ }
+```
+Now run 
+```
+npm run dev
+```
+
