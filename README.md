@@ -106,6 +106,66 @@ npm run build
 node dist/app.bundle.js
 ```
 
+### 4. Handle ES6 features with Babel
+
+Let change the index.js and person.js file as follows
+```
+index.js:
+
+import person from './person';
+console.log(person('sudarshan shenoy'));
+
+
+
+person.js:
+
+const person = name => `hey ${name}`
+export default person;
+```
+Let install babel
+```
+npm install --save-dev @babel/core @babel/cli @babel/preset-env
+```
+Let try executing the babel on our code
+```
+./node_modules/.bin/babel ./src/person.js --presets=@babel/preset-env
+```
+This will show that our modern javascript code syntax is transformed
+
+Let put this in webpack.config.js to automate the process of transformation during the build
+To do that we will need babel loader
+
+```
+npm i -D babel-loader
+```
+
+
+Add new attribute in the webpack.config.js called module as follows
+```
+const path = require('path');
+
+module.exports = {
+  mode: 'production',
+  entry: './src/index.js',
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        options: {
+          presets: ['@babel/preset-env']
+        }
+      }
+    ]
+  }
+}
+```
+As you see module contains rules which is a array. Under rules the test key has a regex expression which say get me all the files which match this regex and give that as the input to the babel. Next exlude says not to include the files inside node_modules as metioned. Options has the option we have to give when we run the babel command
 
 
 
