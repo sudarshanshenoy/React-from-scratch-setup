@@ -167,6 +167,99 @@ module.exports = {
 ```
 As you see module contains rules which is a array. Under rules the test key has a regex expression which say get me all the files which match this regex and give that as the input to the babel. Next exlude says not to include the files inside node_modules as metioned. Options has the option we have to give when we run the babel command
 
+### 4. Install React and cofigure babel and HtmlWebpackPlugin
+To install react run the following command
+```
+npm install react react-dom prop-types
+```
+change index.js to
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App'
 
+ReactDOM.render(<App/>, document.getElementById('app'))
+```
+create a new file App.js
+```
+import React from 'react';
 
+class App extends React.Component {
+  render() {
+    return <h1>Hello World</h1>
+  }
+}
 
+export default App;
+```
+Now if we try to build this it will throw a error as it encounters JSX syntax. To solve this we will need one more loader
+```
+npm i -D @babel/preset-react
+```
+add @babel/preset-react to options in the webpack.config.js
+```
+module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        options: {
+          presets: ['@babel/preset-env', '@babel/preset-react']
+        }
+      }
+    ]
+  }
+```
+If you run the 'npm run build' the js file is bundled. If you run the build it gives a error as it could not recognise document.getElementById. To solve this we need HtmlWebpackPlugin as dev dependency
+```
+npm i -D html-webpack-plugin
+```
+Update the webpack.config.js file as follows
+```
+
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  mode: 'production',
+  entry: './src/index.js',
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        options: {
+          presets: ['@babel/preset-env', '@babel/preset-react']
+        }
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html'
+    })
+  ]
+}
+```
+Create a index.html file in in the src folder
+```
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>
+```
+run build and open the index.html generated in the dist folder. You will see that react is installed and up and running
