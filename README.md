@@ -167,7 +167,7 @@ module.exports = {
 ```
 As you see module contains rules which is a array. Under rules the test key has a regex expression which say get me all the files which match this regex and give that as the input to the babel. Next exlude says not to include the files inside node_modules as metioned. Options has the option we have to give when we run the babel command
 
-### 4. Install React and cofigure babel and HtmlWebpackPlugin
+### 5. Install React and cofigure babel and HtmlWebpackPlugin
 To install react run the following command
 ```
 npm install react react-dom prop-types
@@ -264,7 +264,7 @@ Create a index.html file in in the src folder
 ```
 run build and open the index.html generated in the dist folder. You will see that react is installed and up and running
 
-### 5. Run webpack in watch mode
+### 6. Run webpack in watch mode
 
 Add the following line under scripts in package.json
 ```
@@ -276,7 +276,7 @@ npm run dev
 ```
 When ever there is a change it will rebuild
 
-### 6. Separate Webpack config for development and production
+### 7. Separate Webpack config for development and production
 Install webpack merge
 ```
 npm i -D webpack-merge
@@ -349,7 +349,7 @@ In the package.json change the script like this
   },
 ```
 
-### 6. Install Webpack dev server to host the app locally and use watch mode auto reload
+### 8. Install Webpack dev server to host the app locally and use watch mode auto reload
 ```
 npm i -D webpack-dev-server
 ```
@@ -361,7 +361,7 @@ open flag will make sure evertime its run it will open a new tab.
 
 I can specific the port the webpack dev server to run by updating the webpack.config
 ```
-webpack.config.dev.js:
+// webpack.config.dev.js:
 
 
 const merge = require('webpack-merge')
@@ -372,5 +372,23 @@ module.exports = merge(baseConfig, {
   devServer: {
     port: 3000
   }
+})
+```
+
+
+### 9. Add source map to make debugging easy
+just add `devtool: 'source-map'`
+```
+// webpack.config.dev.js:
+
+const merge = require('webpack-merge')
+const baseConfig = require('./webpack.config.base')
+
+module.exports = merge(baseConfig, {
+  mode: 'development',
+  devServer: {
+    port: 3000
+  },
+  devtool: 'source-map'
 })
 ```
