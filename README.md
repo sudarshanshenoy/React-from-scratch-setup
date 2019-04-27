@@ -263,3 +263,88 @@ Create a index.html file in in the src folder
 </html>
 ```
 run build and open the index.html generated in the dist folder. You will see that react is installed and up and running
+
+### 5. Run webpack in watch mode
+
+Add the following line under scripts in package.json
+```
+"dev": "webpack --watch --mode development",
+```
+and run
+```
+npm run dev
+```
+When ever there is a change it will rebuild
+
+### 6. Separate Webpack config for development and production
+Install webpack merge
+```
+npm i -D webpack-merge
+```
+Instead of one webpack.config.js we will have 3 files
+* webpack.config.base.js
+* webpack.config.dev.js
+* webpack.config.prod.js
+
+Add the following to respective files
+```
+// webpack.config.base.js:
+
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        options: {
+          presets: ['@babel/preset-env', '@babel/preset-react']
+        }
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html'
+    })
+  ]
+}
+
+
+
+// webpack.config.dev.js:
+
+const merge = require('webpack-merge')
+const baseConfig = require('./webpack.config.base')
+
+module.exports = merge(baseConfig, {
+  mode: 'development'
+})
+
+
+
+// webpack.config.prod.js:
+
+const merge = require('webpack-merge')
+const baseConfig = require('./webpack.config.base')
+
+module.exports = merge(baseConfig, {
+  mode: 'production'
+})
+```
+In the package.json change the script like this
+```
+"scripts": {
+    "build": "webpack --config webpack.config.prod.js",
+    "dev": "webpack --watch --config webpack.config.dev.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+```
