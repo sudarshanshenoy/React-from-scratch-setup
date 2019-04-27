@@ -1,3 +1,5 @@
-import person from './person';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App'
 
-console.log(person('sudarshan shenoy'));
+ReactDOM.render(<App/>, document.getElementById('app'))
