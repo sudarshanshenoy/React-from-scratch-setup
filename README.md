@@ -348,3 +348,29 @@ In the package.json change the script like this
     "test": "echo \"Error: no test specified\" && exit 1"
   },
 ```
+
+### 6. Install Webpack dev server to host the app locally and use watch mode auto reload
+```
+npm i -D webpack-dev-server
+```
+update the dev script in package.json
+```
+"dev": "webpack-dev-server --open --config webpack.config.dev.js",
+```
+open flag will make sure evertime its run it will open a new tab.
+
+I can specific the port the webpack dev server to run by updating the webpack.config
+```
+webpack.config.dev.js:
+
+
+const merge = require('webpack-merge')
+const baseConfig = require('./webpack.config.base')
+
+module.exports = merge(baseConfig, {
+  mode: 'development',
+  devServer: {
+    port: 3000
+  }
+})
+```
