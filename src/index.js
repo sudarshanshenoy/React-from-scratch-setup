@@ -1,3 +1,3 @@
 import person from './person';
 
-console.log(`Hello ${person}`);
+console.log(person('sudarshan shenoy'));
