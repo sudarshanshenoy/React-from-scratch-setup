@@ -392,3 +392,37 @@ module.exports = merge(baseConfig, {
   devtool: 'source-map'
 })
 ```
+
+### 10.Add support for proposed javascript feature
+Install plugin
+```
+npm i -D @babel/plugin-proposal-class-properties
+```
+and plugin under options for babel in webpack.config.base.js
+```
+options: {
+          presets: ['@babel/preset-env', '@babel/preset-react'],
+          plugins: ['@babel/plugin-proposal-class-properties']
+        }
+```
+
+Change the content of App.js
+```
+class App extends React.Component {
+  state = {
+    count: 0
+  }
+  render() {
+    return (
+      <div>
+        <h1>Hello World</h1>
+        <h2>Count: {this.state.count}</h2>
+        <button onClick={() => this.setState(state => ({count: state.count + 1}))}>+</button>
+        <button onClick={() => this.setState(state => ({count: state.count - 1}))}>-</button>
+      </div>  
+    )
+  }
+}
+
+export default App;
+```
