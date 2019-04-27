@@ -72,5 +72,41 @@ Create a file called gitignore with the following content to ignore these folder
 dist/
 node_modules/
 ```
+### 3. Add webpack.config.js file
+First let add a new js file person.js with following content
+```
+const person = 'Sudarshan Shenoy'
+
+export default person;
+```
+and import the file in index.js
+```
+import person from './person';
+
+console.log(`Hello ${person}`);
+```
+Create webpack.config.js with following content
+the entry attribute should have the path to main path from where the webpack has bundle
+Under output we have path attribute which should contain absolute path to the output folder and so we use the path library from node
+```
+const path = require('path');
+
+module.exports = {
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.bundle.js'
+  }
+}
+```
+after this run
+```
+npm run build
+node dist/app.bundle.js
+```
+
+
+
 
 
