@@ -503,3 +503,45 @@ Add new script
 ```
 "dev:hot": "webpack-dev-server --open --hot --config webpack.config.dev.js",
 ```
+
+### 13. Externalise the react and react dom to load from CDN
+add cdn to your index.html template file
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div id="app"></div>
+  <% if(process.env.NODE_ENV === 'production') { %>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <% } %>
+</body>
+</html>
+```
+In webpack base add externals key as show below
+```
+const merge = require('webpack-merge')
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
+const baseConfig = require('./webpack.config.base')
+
+module.exports = merge(baseConfig, {
+  mode: 'production',
+  plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+      reportFilename: 'bundle_sizes.html'
+    })
+  ],
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM'
+  }
+})
+```
