@@ -1,5 +1,5 @@
 ## SETUP REACTJS FROM SCRATCH USING VARIOUS JAVASCRIPT TOOLS
-##### This documentation was done as i was learning from https://egghead.io/courses/modern-javascript-tooling-with-react
+##### This documentation was done as i was learning from egghead course 'modern-javascript-tooling-with-react'
 
 ##### At egghead.io we can learn the difficult parts of the techologies in a very easy and understandle short video from field leading experts. I am very happy with experience and the things i am learning at egghead.io. [Click here](https://egghead.io/?rc=k8fwwp) to signup now
 
@@ -545,3 +545,65 @@ module.exports = merge(baseConfig, {
   }
 })
 ```
+### 14. Target all browsers using babel polyfill
+Install babel polyfill
+```
+npm i -S @babel/polyfill
+npm i -D core-js@2.5.7
+```
+import @babel/polyfill in index.js
+```
+import '@babel/polyfill'
+```
+update the webpack base config
+```
+
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        options: {
+          presets: [[
+            '@babel/preset-env',
+            {
+              targets: [
+                'last 2 versions',
+                'not dead',
+                'not < 2%'
+              ],
+              useBuiltIns: 'entry'
+            }
+          ], '@babel/preset-react'],
+          plugins: [
+            'react-hot-loader/babel',
+            '@babel/plugin-proposal-class-properties'
+          ]
+        }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+        exclude: /node_modules/
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html'
+    })
+  ]
+}
+```
+
+
