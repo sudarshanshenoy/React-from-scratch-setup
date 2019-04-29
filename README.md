@@ -659,3 +659,7 @@ class App extends React.Component {
 
 export default hot(module)(App);
 ```
+### 16. Add Jest for testing
+```
+npm i -D jest
+```
