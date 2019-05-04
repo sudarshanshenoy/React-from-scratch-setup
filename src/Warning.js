@@ -1,3 +1,7 @@
 import React from 'react'
 
-export default () => <span className={'warning'}> Warning </span>
+const Warning = () => <span className={'warning'}> Warning </span>
+
+Warning.displayName = 'Warning'
+
+export default Warning
