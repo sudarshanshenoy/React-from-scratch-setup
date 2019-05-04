@@ -740,3 +740,16 @@ Now run the test
 ```
 npm run test
 ```
+Remove the following import from App.spec.js and move to testSetup.js in root folder and to avoid repeating in all the files
+```
+import 'jest-dom/extend-expect'
+import 'react-testing-library/cleanup-after-each'
+```
+some more setup is needed to make this work.
+create jest.config.js file
+```
+module.exports = {
+  setupTestFrameworkScriptFile: '<rootDir>/testSetup.js'
+}
+```
+
