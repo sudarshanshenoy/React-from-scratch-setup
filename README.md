@@ -1,5 +1,5 @@
 ## SETUP REACTJS FROM SCRATCH USING VARIOUS JAVASCRIPT TOOLS
-##### This documentation was done as i was learning from https://egghead.io/courses/modern-javascript-tooling-with-react
+##### This documentation was done as i was learning from egghead course 'modern-javascript-tooling-with-react'
 
 ##### At egghead.io we can learn the difficult parts of the techologies in a very easy and understandle short video from field leading experts. I am very happy with experience and the things i am learning at egghead.io. [Click here](https://egghead.io/?rc=k8fwwp) to signup now
 
@@ -502,4 +502,164 @@ export default hot(module)(App);
 Add new script
 ```
 "dev:hot": "webpack-dev-server --open --hot --config webpack.config.dev.js",
+```
+
+### 13. Externalise the react and react dom to load from CDN
+add cdn to your index.html template file
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div id="app"></div>
+  <% if(process.env.NODE_ENV === 'production') { %>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <% } %>
+</body>
+</html>
+```
+In webpack base add externals key as show below
+```
+const merge = require('webpack-merge')
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
+const baseConfig = require('./webpack.config.base')
+
+module.exports = merge(baseConfig, {
+  mode: 'production',
+  plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+      reportFilename: 'bundle_sizes.html'
+    })
+  ],
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM'
+  }
+})
+```
+### 14. Target all browsers using babel polyfill
+Install babel polyfill
+```
+npm i -S @babel/polyfill
+npm i -D core-js@2.5.7
+```
+import @babel/polyfill in index.js
+```
+import '@babel/polyfill'
+```
+update the webpack base config
+```
+
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        options: {
+          presets: [[
+            '@babel/preset-env',
+            {
+              targets: [
+                'last 2 versions',
+                'not dead',
+                'not < 2%'
+              ],
+              useBuiltIns: 'entry'
+            }
+          ], '@babel/preset-react'],
+          plugins: [
+            'react-hot-loader/babel',
+            '@babel/plugin-proposal-class-properties'
+          ]
+        }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+        exclude: /node_modules/
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html'
+    })
+  ]
+}
+```
+
+### 15. Async load webpack bundles
+create a new file warning.js
+```
+import React from 'react'
+
+export default () => <span classname={'warning'}> Warning </span>
+```
+Install plugin to support dynamic loading and add it to plugins in webpack config
+```
+npm i -D @babel/plugin-syntax-dynamic-import
+
+// In webpack base config
+plugins: [
+            'react-hot-loader/babel',
+            '@babel/plugin-proposal-class-properties',
+            '@babel/plugin-syntax-dynamic-import',
+          ]
+```
+
+
+Lazy load the react components in App.js
+```import React from 'react';
+import {hot} from 'react-hot-loader';
+import Warning from './Warning';
+import './index.css';
+
+const Warning = React.lazy(() => import('./Warning'))
+
+class App extends React.Component {
+  state = {
+    count: 0
+  }
+  render() {
+    return (
+      <div>
+        <h1>Hello World</h1>
+        <h2>Count: {this.state.count}</h2>
+        <button onClick={() => this.setState(state => ({count: state.count + 1}))}>+</button>
+        <button onClick={() => this.setState(state => ({count: state.count - 1}))}>-</button>
+        {
+          this.state.count > 10 ? 
+          <React.Suspense fallback={null}>
+            <Warning /> 
+          </React.Suspense>
+          : null
+        }
+      </div>  
+    )
+  }
+}
+
+export default hot(module)(App);
+```
+### 16. Add Jest for testing
+```
+npm i -D jest
 ```
