@@ -1,5 +1,5 @@
 ## SETUP REACTJS FROM SCRATCH USING VARIOUS JAVASCRIPT TOOLS
-##### This documentation was done as i was learning from egghead course 'modern-javascript-tooling-with-react'
+##### This documentation was done as i was learning from egghead course 'modern-javascript-tooling-with-react' authored by Andy van Slaars. I take the opportunity to thank egghead.io and Andy van Slaars.
 
 ##### At egghead.io we can learn the difficult parts of the techologies in a very easy and understandle short video from field leading experts. I am very happy with experience and the things i am learning at egghead.io. [Click here](https://egghead.io/?rc=k8fwwp) to signup now
 
