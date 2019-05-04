@@ -663,3 +663,80 @@ export default hot(module)(App);
 ```
 npm i -D jest
 ```
+create a file App.spec.js
+```
+describe('App', () => {
+  it('Runs and passes', () => {
+    expect(true).toBe(true)
+  })
+})
+```
+Add script in package.json
+```
+"test": "jest"
+```
+run the test script.
+
+Next to test react components we will need the following
+```
+npm i -D react-testing-library jest-dom
+```
+change the App.spec.js 
+```
+import React from 'react';
+import { render } from 'react-testing-library'
+import 'jest-dom/extend-expect'
+import 'react-testing-library/cleanup-after-each'
+import App from './App'
+
+describe('App', () => {
+  it('Render with error', () => {
+    render(<App />)
+  })
+})
+```
+move the options under babel config to .babelrc file
+```
+{
+  "presets": [[
+    "@babel/preset-env",
+    {
+      "targets": [
+        "last 2 versions",
+        "not dead",
+        "not < 2%"
+      ],
+      "useBuiltIns": "entry"
+    }
+  ], "@babel/preset-react"],
+  "plugins": [
+    "react-hot-loader/babel",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-syntax-dynamic-import",
+  ]
+}
+```
+Add more libraries
+```
+npm i -Dbabel-plugin-dynamic-import-node
+```
+Handling css import
+```
+1. Add to package.json
+"jest": {
+    "moduleNameMapper": {
+      "\\.(css|less|sass|scss)$": "<rootDir>/__mocks__/styleMock.js",
+      "\\.(gif|ttf|eot|svg)$": "<rootDir>/__mocks__/fileMock.js"
+    }
+  }
+  
+ 2.  Create a folder  __mocks__ and create fileMock.js and styleMock.js
+ fileMock.js:
+ module.exports = 'test-file-stub';
+ styleMock.js
+ module.exports = {};
+```
+Now run the test
+```
+npm run test
+```
