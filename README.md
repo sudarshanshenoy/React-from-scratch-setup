@@ -753,3 +753,24 @@ module.exports = {
 }
 ```
 
+### 17. Add Prettier
+```
+npm i -D prettier pretty-quick
+```
+add a script in the package.json
+```
+ "format": "pretty-quick"
+```
+add .prettierrc
+```
+{
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true
+}
+```
+add .prettierignore
+```
+dist
+package-lock.json
+```
